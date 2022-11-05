@@ -1,0 +1,380 @@
+//IMPORT
+import java.util.ArrayList;
+import java.util.Scanner;
+//CLASS
+public class AppM8E4 {
+//GLOBAL VAR(NO BP)
+//AL BUILDING
+	static ArrayList<Building>buildingList=new ArrayList<Building>();
+//MAIN CLASS
+	public static void main(String[] args) {
+		//
+		buildingList.add(new Hotel("Hotel Leigh Park", 2, 500, 50));
+		buildingList.add(new Hospital("Bath Central Hospital", 4, 1500, 500));
+		buildingList.add(new Cinema("Cine Verdi", 2, 300, 100));
+		//METHODS CALLING
+		actionMenu();
+		//END
+		System.out.println("\n" + "Fi.");
+	}
+	//CLASS METHODS
+		static void addBuilding () {
+			//variables
+			boolean out = false;
+			do{
+				switch(menu("\n" +"Quin tipus d'Edifici vols crear?","1.- Hotel.","2.- Hospital.","3.- Cinema.","0.- Cap." + "\n")) {
+					case 1: addHotel();
+					break;
+					case 2: addHospital();
+					break;
+					case 3: addCinema();
+					break;	
+					case 0: System.out.println("\n" + "Tornes al menú principal." + "\n");
+					out = true;
+					break;
+				}
+			}while(!out); 
+		}
+		static void deleteBuilding() {
+			//variables
+			int indexBuilding;
+			//
+			indexBuilding = findBuilding(getString("\n" + "Quin és el nom?" + "\n"));
+			if (indexBuilding == -1) {
+				System.out.println("\n" + "Aquest edifici no està en el programa" + "\n");
+			} else {
+				System.out.println("\n" + "L'has esborrat." + "\n");
+				buildingList.remove(indexBuilding);
+			}
+		}
+		static void showBuilding() {
+			//var
+			boolean out=false;
+			do {
+				switch(menu("\n" +"Quin tipus d'Edifici vols veure?","1.- Hotel.","2.- Hospital.","3.- Cinema.","0.- Cap.\n")) {
+					case 1: showHotel();
+					break;
+					case 2: showHospital();
+					break;
+					case 3: showCinema();
+					break;
+					case 0: 
+					out = true;
+			        break;
+				}
+			} while(!out);
+		}
+		static void addHotel() {
+			//variables
+			int indexBuilding;
+			String name;
+			//
+			name=getString("Quin és el nom?");
+			indexBuilding = findBuilding(name);
+		
+			if (indexBuilding >= 0) {
+				System.out.println("\n" + "Ja està en el programa");
+			} else {
+				buildingList.add(new Hotel(name, getInt("Cuantes plantes té?"),
+											getFloat("Quina és la superfície"), getInt("Cuantes habitacions té?")));
+			}
+		}
+		static void addHospital() {
+			//variables	
+			int indexBuilding;
+			String name;
+			//
+			name=getString("Quin és el nom?");
+			indexBuilding = findBuilding(name);
+			
+			if (indexBuilding >= 0) {
+				System.out.println("\n" + "Ja està en el programa");
+			} else {
+				buildingList.add(new Hospital(name, getInt("Cuantes plantes té?"),
+											getFloat("Quina és la superfície"), getInt("Quants pacients té?")));
+			}
+		}
+		static void addCinema() {
+			//variables	
+			int indexBuilding;
+			String name;
+			//
+			name=getString("Quin és el nom?");
+			indexBuilding = findBuilding(name);
+			
+			if (indexBuilding >= 0) {
+				System.out.println("\n" + "Ja està en el programa");
+			} else {
+				buildingList.add(new Cinema(name, getInt("Cuantes plantes té?"), 
+											getFloat("Quina és la superfície"), getInt("Quin és l'aforament màxim?")));
+			}
+		}
+		static void showHotel() {
+			int indexBuilding;
+			indexBuilding = findBuilding(getString("Quin és el nom?"));
+			if (indexBuilding >= 0) {
+				Building currentBuilding= buildingList.get(indexBuilding);
+				if(currentBuilding instanceof Hotel) {
+				Hotel currentHotel= (Hotel) currentBuilding;
+				callMethodsHotel(currentHotel);
+				} else {
+				System.out.println("Aquest edifici no és un Hotel");
+				}
+			} else {
+				System.out.println("Aquest Hotel no està al programa.");
+			}	
+		}
+		static void showHospital() {
+			int indexBuilding;
+			indexBuilding = findBuilding(getString("Quin és el nom?"));
+			if (indexBuilding >= 0) {
+				Building currentBuilding= buildingList.get(indexBuilding);
+				if(currentBuilding instanceof Hospital) {
+				Hospital currentHospital= (Hospital) currentBuilding;
+				callMethodsHospital(currentHospital);
+				} else {
+				System.out.println("Aquest edifici no és un Hospital");
+				}
+			} else {
+			 	System.out.println("Aquest Hospital no està al programa.");
+			}
+		}
+		static void showCinema() {
+			int indexBuilding;
+			indexBuilding = findBuilding(getString("Quin és el nom?"));
+			if (indexBuilding >= 0) {
+				Building currentBuilding= buildingList.get(indexBuilding);
+				if(currentBuilding instanceof Cinema) {
+					Cinema currentCinema= (Cinema) currentBuilding;
+					callMethodsCinema(currentCinema);
+				} else {
+					System.out.println("Aquest edifici no és un Cinema");
+				}
+			} else {
+				System.out.println("Aquest Cinema no està al programa.");
+			}
+		}
+		static void callMethodsHotel(Hotel currentHotel) {
+			currentHotel.toString("Aquest és l'Hotel:");
+			currentHotel.costSecurity(1800, 1000);
+			currentHotel.clean(5, 1);
+			currentHotel.calculateMantenaince(20, 1000);
+		}
+		static void callMethodsHospital(Hospital currentHospital) {
+			currentHospital.toString("Aquest és l'Hospital:");
+			currentHospital.costSecurity(1300, 1000);
+			currentHospital.clean(5, 1);
+			currentHospital.mealService(3);
+		}
+		static void callMethodsCinema(Cinema currentCinema) {
+			currentCinema.toString("Aquest és el cinema: ");
+			currentCinema.costSecurity(1300, 3000);
+			currentCinema.clean(5, 1);
+			currentCinema.filmProjectionBenefits(getFloat("Quin és el preu de l'entrada?"), getInt("Quants espectadors hi ha en la sessió?"));
+		}
+		//AUXILIAR METHODS
+		static void actionMenu() {
+			boolean out = false;
+			do {
+				switch(menu("\nEscull una opció:","1.- Crear un Edifici","2.- Donar de baixa un Edifici","3.- Veure un Edifici","0.- Sortir del programa \n")){
+					case 1: addBuilding();
+                    break;
+					case 2: deleteBuilding();
+                    break;
+					case 3: showBuilding();
+                    break;
+					case 0: System.out.println("\n" + "Gràcies per utilitzar l'aplicació");
+             				out = true;
+                    break;
+				}
+			} while(!out);   
+		}
+		static byte menu(String message1, String message2, String message3, String message4, String message5) {
+			
+			Scanner input = new Scanner(System.in); 
+			
+			byte option;
+			final byte minimum = 0;
+			final byte maximum = 3;
+			
+	        do{
+	            System.out.println(message1);
+	            System.out.println(message2);
+	            System.out.println(message3);
+	            System.out.println(message4);
+	            System.out.println(message5);
+	            option = input.nextByte();
+	            if(option < minimum || option > maximum){
+	                System.out.println("Escull una opció vàlida");
+	            }
+	        }while(option < minimum || option > maximum);
+	        return option;
+		}
+		static int findBuilding(String name) {
+			//variables
+			int indexList = 0;
+			int indexBuilding =-1;
+			boolean find = false;
+	
+			while(indexList < buildingList.size() && !find) { 
+			
+				if(buildingList.get(indexList).getName().equalsIgnoreCase(name)) {
+					indexBuilding = indexList;
+					find = true;
+				}
+				indexList++;
+			}
+			return indexBuilding;		
+		}
+		static int getInt(String message) {
+			Scanner input = new Scanner(System.in);	
+			System.out.println(message);
+			return input.nextInt();	
+		}	
+		static String getString(String message) {
+			Scanner input = new Scanner(System.in);
+			System.out.println(message);
+			return input.nextLine();	
+		}
+		static float getFloat(String message) {
+			Scanner input = new Scanner(System.in);	
+			System.out.println(message);
+			return input.nextFloat();	
+		}
+}
+//IMPORT
+import java.util.ArrayList;
+
+//SUPERCLASS
+public abstract class Building {
+	//PROPERTIES OR ATTRIBUTES
+		//protected
+		protected String name;
+		protected int floorsNumber;
+		protected float area;
+	//CONSTRUCTOR: initialize an object
+		public Building (String name, int floorsNumber, float area) {
+			this.name = name;
+			this.floorsNumber = floorsNumber;
+			this.area = area;
+		}
+	//GETTERS/NO SETTERS
+		public String getName() {
+			return name;
+		}
+		public int getFloorsNumber() {
+			return floorsNumber;
+		}
+		public float getTotalArea() {
+			return area;
+		}
+	//SHARED METHODS
+		
+		public void costSecurity (int costWorker, int areaPerWorker) {
+			System.out.println("\n" + "Aquest és el número de vigilants que necessita l'edifici: " + Math.ceil(area/areaPerWorker) +" ." + "\n");//round up
+			System.out.println("\n" + "Aquest és el cost de Seguretat: " + area/areaPerWorker*costWorker + " €." + "\n");
+		}
+		public void clean (int areaPerMinute, float costMinute) {
+		double timeClean;
+			if(floorsNumber>1){
+			timeClean =	(area/areaPerMinute) + (0.5*floorsNumber);
+			System.out.println("\n" + "Aquest és el temps de neteja: " + timeClean + " minuts."+ "\n");	
+			} else {
+			timeClean = area/areaPerMinute;
+			System.out.println("\n" + "Aquest és el temps de neteja: " + timeClean + " minuts." + "\n");
+			}
+			costClean(timeClean, 1);//fer crida desde el main?
+		}
+		public void costClean (double timeClean, int costMinute) {
+			System.out.println("\n" + "El preu diari de la neteja és: " + timeClean * costMinute + " €." + "\n");
+			System.out.println("\n" + "El preu mensual de la neteja és: " + (timeClean * costMinute)*30 + " €." +  "\n");
+		}
+	//OVERRIDE METHODS
+		//.toString() METHOD 
+		public String toString(String message) {
+	        return message + "\n" + "Nom: " + name + "." + "\n"
+	        				+ "Número de plantes: " + floorsNumber + "." 
+	        				+ "\n" + "Superfície: "+ area + " m²."  + "\n";
+	    }
+}
+
+
+//SUBCLASS
+public class Cinema extends Building {
+//PROPERTIES OR ATTRIBUTES
+	private int maximumCapacity;
+	//CONSTRUCTOR//STATIC POLYMORPHISM
+	public Cinema (String name,int floorsNumber,float area, int maximumCapacity) {
+		super (name, floorsNumber, area); 
+		this.maximumCapacity = maximumCapacity;	
+	}
+	//GETTERS
+	public int getMaximumCapacity () {
+		return maximumCapacity;
+	}
+	//CLASS METHODS
+	public void filmProjectionBenefits (float price, int viewers) {//get ticket price and x viewers <= maximumCapacity
+		if(viewers <= maximumCapacity) {
+			System.out.println("\n" + "Aquesta és la recaptació: " + price*viewers + " €. \n");
+		} else {
+			System.out.println("\n" + "El número d'espectadors ha de ser menor a l'aforament màxim");
+		}		
+	}
+	//.toString() METHOD //DYNAMIC POLYMORPHISM
+	public String toString(String message) {        
+		return super.toString(message) + "\n" + "El seu aforament màxim és de " + maximumCapacity + " espectadors." + "\n" ;
+	}			
+}
+
+//SUBCLASS
+public class Hospital extends Building {
+	//PROPERTIES OR ATTRIBUTES
+	private int patientsNum;
+	//CONSTRUCTOR//STATIC POLYMORPHISM
+	public Hospital (String name, int floorsNumber, float area, int patientsNum) {
+		super (name, floorsNumber, area);//SUPER CONSTRUCTOR CALL
+		this.patientsNum = patientsNum;	
+	}
+	//GETTERS
+	public int getPatientsNum() {
+		return patientsNum;
+	}
+	//SETTERS
+	public void setPatientNum(int patientsNum) {
+		this.patientsNum = patientsNum;
+	}
+	//CLASS METHODS
+	public void mealService(int times) {
+		System.out.println("\n" + "S’estan repartint " + times * patientsNum + " racions. \n");
+	}
+	//.toString() METHOD // DYNAMIC POLIMORPHISM
+	public String toString(String message) {       
+		return super.toString(message)  + "\n" + "En aquest moment té " + patientsNum + " pacients." + "\n" ;
+	}
+}
+
+//SUBCLASS:is it? rule
+public class Hotel extends Building{
+	//PROPERTIES OR ATTRIBUTES
+	//private
+	private int roomsNumber;
+	//CONSTRUCTOR// STATIC POLYMORPHISM
+	public Hotel (String name,int floorsNumber,float area, int roomsNumber) {
+		super (name, floorsNumber, area); 
+		this.roomsNumber = roomsNumber;	
+	}
+	//GETTERS
+	public int getRoomsNumber() {
+		return roomsNumber;
+	}
+	//CLASS METHODS
+	public void calculateMantenaince(int roomsForWorker , int salary) {
+		System.out.println("\n" + "Aquest és el cost de manteniment de l'Hotel:");
+		System.out.println("\n" + "Es necessiten: " + (float)roomsNumber/roomsForWorker + " treballadors/es." +"\n");
+		System.out.println("\n"+ "El cost total és: " + (float)roomsNumber/roomsForWorker*salary + " €." + "\n");
+	}
+	//.toString() METHOD // DYNAMIC POLYMORPHISM
+		public String toString(String message) {
+			return super.toString(message) + "\n" + "Té " + roomsNumber + " habitacions." + "\n" ;
+	}
+}
